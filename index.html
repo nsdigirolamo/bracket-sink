@@ -2,19 +2,26 @@
 <html>
     <head>
         <title>Bracket Sink!</title>
-        <script type="module" src="/scripts/create-bracket.js"></script>
+        <script type="module" src="/scripts/bracket-creator.js"></script>
+        <script type="module" src="/scripts/firebase-utils.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.3.1/firebase-app-compat.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.3.1/firebase-auth-compat.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.3.1/firebase-database-compat.js"></script>
     </head>
     <body>
         <header>
             <h1>Bracket Sink!</h1>
         </header>
-            <form id="bracket-creator">
-                <label for="bracket-name">Bracket Name:</label>
-                <input id="bracket-name" type="text">
-                <input id="bracket-submit" type="submit" value="Submit">
+            <form id="tournament-creator">
+                <label for="tournament-name">Tournament Name: </label>
+                <input id="tournament-name" type="text">
+                <fieldset id="tournament-participants">
+                    <legend>Tournament Participants</legend>
+                    <button id="add-participant" type="button">Add Participants</button>
+                </fieldset>
+                <input id="submit-tournament" type="submit" value="Create Tournament">
             </form>
         <footer>
-
         </footer>
     </body>
 </html>
