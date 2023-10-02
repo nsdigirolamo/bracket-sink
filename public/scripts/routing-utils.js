@@ -1,7 +1,7 @@
 import { getTournament } from "./firebase-utils.js";
 
 const url_routes = {
-    tournaments: (url) => /^\/tournaments\/[\w]{10}$/.test(url)
+    tournaments: (url) => /^\/tournaments\/[\w-]{10}$/.test(url)
 }
 
 /**
