@@ -1,3 +1,4 @@
+import { nanoid } from "https://cdn.jsdelivr.net/npm/nanoid/nanoid.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDFK2v1m8prU3lD80WGvGlRvEyErXp-HVc",
@@ -10,8 +11,18 @@ const firebaseConfig = {
     measurementId: "G-4DZYNB3GBF"
 };
 
+export function Tournament (name, participants) {
+    this.id = nanoid(10);
+    this.name = name;
+    this.participants = participants;
+}
+
 export function postTournament (tournament) {
-    firebase.database().ref("/tournaments").push(tournament);
+    firebase.database().ref(`/tournaments/${tournament.id}`).set(tournament);
+}
+
+export async function getTournament (id) {
+    return (await firebase.database().ref(`/tournaments/${id}`).get()).toJSON();
 }
 
 firebase.initializeApp(firebaseConfig);

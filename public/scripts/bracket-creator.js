@@ -1,5 +1,4 @@
-import { nanoid } from "https://cdn.jsdelivr.net/npm/nanoid/nanoid.js";
-import { postTournament } from "./firebase-utils.js";
+import { Tournament, postTournament, getTournament } from "./firebase-utils.js";
 
 let participant_count = 0
 
@@ -27,23 +26,20 @@ function submitBracket (event) {
 
     let elements = event.target.elements;
 
-    let tournament = {
-        id: nanoid(10),
-        name: "",
-        participants: [],
-    }
+    let name = "";
+    let participants = [];
 
     for (let i = 0; i < elements.length; i++) {
         if (elements[i].tagName == "INPUT") {
             if (elements[i].id == "tournament-name") {
-                tournament.name = elements[i].value;
+                name = elements[i].value;
             } else if (/participant-\d/.test(elements[i].id)) {
-                tournament.participants.push(elements[i].value);
+                participants.push(elements[i].value);
             }
         }
     }
 
-    postTournament(tournament);
+    postTournament(new Tournament(name, participants));
 }
 
 document.querySelector("#tournament-creator").addEventListener("submit", submitBracket);
