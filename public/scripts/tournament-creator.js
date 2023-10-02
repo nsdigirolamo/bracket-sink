@@ -2,6 +2,9 @@ import { Tournament, postTournament, getTournament } from "./firebase-utils.js";
 
 let participant_count = 0
 
+/**
+ * Adds a participant text input element to the creator form.
+ */
 function addParticipantTextInputElement () {
     participant_count++;
     const new_id = "participant-" + participant_count;
@@ -21,7 +24,11 @@ function addParticipantTextInputElement () {
     tournament_participant_fieldset.insertBefore(new_input_element, add_participant_button);
 }
 
-function submitBracket (event) {
+/**
+ * Called by an event listener, parses information from the creator form and POSTs the constructed tournament to the database.
+ * @param {SubmitEvent} event 
+ */
+function submitTournament (event) {
     event.preventDefault();
 
     let elements = event.target.elements;
@@ -42,7 +49,7 @@ function submitBracket (event) {
     postTournament(new Tournament(name, participants));
 }
 
-document.querySelector("#tournament-creator").addEventListener("submit", submitBracket);
+document.querySelector("#tournament-creator").addEventListener("submit", submitTournament);
 document.querySelector("#add-participant").addEventListener("click", addParticipantTextInputElement);
 
 // Initialize the form with two pre-exisiting participant fields.

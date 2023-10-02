@@ -11,18 +11,33 @@ const firebaseConfig = {
     measurementId: "G-4DZYNB3GBF"
 };
 
+/**
+ * Returns a Tournament object with the given name and participants.
+ * @param {string} name 
+ * @param {string[]} participants
+ * @return {Tournament}
+ */
 export function Tournament (name, participants) {
     this.id = nanoid(10);
     this.name = name;
     this.participants = participants;
 }
 
+/**
+ * POSTs the given Tournament to the database.
+ * @param {Tournament} tournament 
+ */
 export function postTournament (tournament) {
     firebase.database().ref(`/tournaments/${tournament.id}`).set(tournament);
 }
 
-export async function getTournament (id) {
-    return (await firebase.database().ref(`/tournaments/${id}`).get()).toJSON();
+/**
+ * GETs the Tournament with the given id from the database and returns a Promise to corresponding DataSnapshot.
+ * @param {string} id
+ * @returns {Promise<DataSnapshot>}
+ */
+export function getTournament (id) {
+    return firebase.database().ref(`/tournaments/${id}`).get();
 }
 
 firebase.initializeApp(firebaseConfig);
