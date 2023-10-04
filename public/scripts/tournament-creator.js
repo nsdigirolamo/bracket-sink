@@ -1,4 +1,4 @@
-import { Tournament, postTournament, getTournament } from "./firebase-utils.js";
+import { Tournament, postTournament } from "./firebase-utils.js";
 
 let participant_count = 0
 
@@ -6,6 +6,7 @@ let participant_count = 0
  * Adds a participant text input element to the creator form.
  */
 function addParticipantTextInputElement () {
+
     participant_count++;
     const new_id = "participant-" + participant_count;
 
@@ -29,8 +30,8 @@ function addParticipantTextInputElement () {
  * @param {SubmitEvent} event 
  */
 function submitTournament (event) {
-    event.preventDefault();
 
+    event.preventDefault();
     const elements = event.target.elements;
 
     let name = "";
