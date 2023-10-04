@@ -1,6 +1,6 @@
 import { Tournament, postTournament } from "./firebase-utils.js";
 
-let participant_count = 0
+let participant_count = 0;
 
 /**
  * Adds a participant text input element to the creator form.
@@ -51,12 +51,14 @@ function submitTournament (event) {
 }
 
 /**
- * Loads the creator form onto the DOM.
+ * Loads the creator form onto the page view.
  */
 export async function loadCreator () {
 
+    participant_count = 0;
+
     const form = document.createElement("form");
-    form.id = "tournament-creator"
+    form.id = "tournament-creator";
     form.innerHTML = `
         <label for="tournament-name">Tournament Name: </label>
         <input id="tournament-name" type="text">
@@ -67,7 +69,7 @@ export async function loadCreator () {
         <input id="submit-tournament" type="submit" value="Create Tournament">
     `;
 
-    document.body.appendChild(form);
+    document.querySelector("#page-view").appendChild(form);
 
     document.querySelector("#tournament-creator").addEventListener("submit", submitTournament);
     document.querySelector("#add-participant").addEventListener("click", addParticipantTextInputElement);
