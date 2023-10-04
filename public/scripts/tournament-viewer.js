@@ -7,8 +7,7 @@ import { getTournament } from "./firebase-utils.js";
 export async function loadViewer (tournament_id) {
 
     const new_div_element = document.createElement("div");
-    const div_text = document.createTextNode(JSON.stringify((await getTournament(tournament_id)).val()));
-    new_div_element.appendChild(div_text);
+    new_div_element.textContent = JSON.stringify((await getTournament(tournament_id)).val());
     document.querySelector("#page-view").appendChild(new_div_element);
 
 }

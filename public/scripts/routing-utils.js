@@ -34,7 +34,7 @@ function loadHome () {
 
     const creator_nav_button = document.createElement("button");
     creator_nav_button.id = "tournament-creator-nav-button";
-    creator_nav_button.textContent = "Test";
+    creator_nav_button.textContent = "Create Tournament";
     document.querySelector("#page-view").appendChild(creator_nav_button);
 
     document.querySelector("#tournament-creator-nav-button").addEventListener("click", () => {

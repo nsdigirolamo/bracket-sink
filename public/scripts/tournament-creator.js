@@ -12,8 +12,7 @@ function addParticipantTextInputElement () {
 
     const new_label_element = document.createElement("label");
     new_label_element.htmlFor = new_id;
-    const new_label = document.createTextNode("Participant " + participant_count + ": ");
-    new_label_element.appendChild(new_label);
+    new_label_element.textContent = `Participant ${participant_count}:`
 
     const new_input_element = document.createElement("input");
     new_input_element.type = "text";
