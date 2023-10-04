@@ -1,4 +1,5 @@
 import { nanoid } from "https://cdn.jsdelivr.net/npm/nanoid/nanoid.js";
+import { loadCreator } from "./tournament-creator.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDFK2v1m8prU3lD80WGvGlRvEyErXp-HVc",

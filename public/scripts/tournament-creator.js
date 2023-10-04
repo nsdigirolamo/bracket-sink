@@ -9,12 +9,12 @@ function addParticipantTextInputElement () {
     participant_count++;
     const new_id = "participant-" + participant_count;
 
-    let new_label_element = document.createElement("label");
+    const new_label_element = document.createElement("label");
     new_label_element.htmlFor = new_id;
-    let new_label = document.createTextNode("Participant " + participant_count + ": ");
+    const new_label = document.createTextNode("Participant " + participant_count + ": ");
     new_label_element.appendChild(new_label);
 
-    let new_input_element = document.createElement("input");
+    const new_input_element = document.createElement("input");
     new_input_element.type = "text";
     new_input_element.id = new_id;
 
@@ -31,7 +31,7 @@ function addParticipantTextInputElement () {
 function submitTournament (event) {
     event.preventDefault();
 
-    let elements = event.target.elements;
+    const elements = event.target.elements;
 
     let name = "";
     let participants = [];
@@ -49,9 +49,29 @@ function submitTournament (event) {
     postTournament(new Tournament(name, participants));
 }
 
-document.querySelector("#tournament-creator").addEventListener("submit", submitTournament);
-document.querySelector("#add-participant").addEventListener("click", addParticipantTextInputElement);
+/**
+ * Loads the creator form onto the DOM.
+ */
+export async function loadCreator () {
 
-// Initialize the form with two pre-exisiting participant fields.
-addParticipantTextInputElement(participant_count);
-addParticipantTextInputElement(participant_count);
+    const form = document.createElement("form");
+    form.id = "tournament-creator"
+    form.innerHTML = `
+        <label for="tournament-name">Tournament Name: </label>
+        <input id="tournament-name" type="text">
+        <fieldset id="tournament-participants">
+            <legend>Tournament Participants</legend>
+            <button id="add-participant" type="button">Add Participants</button>
+        </fieldset>
+        <input id="submit-tournament" type="submit" value="Create Tournament">
+    `;
+
+    document.body.appendChild(form);
+
+    document.querySelector("#tournament-creator").addEventListener("submit", submitTournament);
+    document.querySelector("#add-participant").addEventListener("click", addParticipantTextInputElement);
+
+    // Initialize the form with two pre-exisiting participant fields.
+    addParticipantTextInputElement(participant_count);
+    addParticipantTextInputElement(participant_count);
+}
