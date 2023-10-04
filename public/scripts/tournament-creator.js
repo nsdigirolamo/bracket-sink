@@ -19,7 +19,7 @@ function addParticipantTextInputElement () {
     new_input_element.type = "text";
     new_input_element.id = new_id;
 
-    const tournament_participant_fieldset = document.querySelector("#tournament-participants")
+    const tournament_participant_fieldset = document.querySelector("#tournament-participants");
     const add_participant_button = document.querySelector("#add-participant");
     tournament_participant_fieldset.insertBefore(new_label_element, add_participant_button);
     tournament_participant_fieldset.insertBefore(new_input_element, add_participant_button);
