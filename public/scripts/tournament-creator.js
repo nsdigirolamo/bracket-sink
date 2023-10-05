@@ -52,7 +52,7 @@ function submitTournament (event) {
 /**
  * Loads the creator form onto the page view.
  */
-export async function loadCreator () {
+export function loadCreator () {
 
     participant_count = 0;
 

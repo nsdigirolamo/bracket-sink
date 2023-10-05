@@ -1,4 +1,5 @@
 import { nanoid } from "https://cdn.jsdelivr.net/npm/nanoid/nanoid.js";
+import { routeUrl, loadLogin, clearPageView, replaceUrl } from "./routing-utils.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDFK2v1m8prU3lD80WGvGlRvEyErXp-HVc",
@@ -11,16 +12,25 @@ const firebaseConfig = {
     measurementId: "G-4DZYNB3GBF"
 };
 
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+
 /**
- * Returns a Tournament object with the given name and participants.
- * @param {string} name 
+ * Creates a new Tournament.
+ * @param {string} name
  * @param {string[]} participants
  * @return {Tournament}
  */
-export function Tournament (name, participants) {
-    this.id = nanoid(10);
-    this.name = name;
-    this.participants = participants;
+export class Tournament {
+    constructor(name, participants) {
+        this.id = nanoid(10);
+        this.creator_uid = auth.currentUser.uid;
+        this.creator_display_name = auth.currentUser.displayName;
+        this.date_created = new Date().toJSON();
+        this.name = name;
+        this.participants = participants;
+    }
 }
 
 /**
@@ -40,4 +50,29 @@ export function getTournament (id) {
     return firebase.database().ref(`/tournaments/${id}`).get();
 }
 
-firebase.initializeApp(firebaseConfig);
+/**
+ * Prompts the user for login and logs them in using the given credentials.
+ * @returns {Promise<UserCredential>}
+ */
+export function getLogin () {
+    let provider = new firebase.auth.GoogleAuthProvider();
+    return firebase.auth().signInWithPopup(provider);
+}
+
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        routeUrl();
+        document.querySelector("#display-user").textContent = user.displayName;
+        document.querySelector("#sign-out-button").style.visibility = "visible";
+    } else {
+        clearPageView();
+        replaceUrl("/login");
+        loadLogin();
+        document.querySelector("#display-user").textContent = "Not Signed In.";
+        document.querySelector("#sign-out-button").style.visibility = "hidden";
+    }
+});
+
+document.querySelector("#sign-out-button").addEventListener("click", () => {
+    auth.signOut();
+});
