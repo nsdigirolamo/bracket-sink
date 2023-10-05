@@ -25,13 +25,13 @@ function addParticipantTextInputElement () {
 }
 
 /**
- * Called by an event listener, parses information from the creator form and POSTs the constructed tournament to the database.
- * @param {SubmitEvent} event 
+ * Parses information from the creator form, constructs a Tournament from this information, and saves the Tournament to the database.
+ * @param {SubmitEvent} submitEvent The called event from the creator form's submission.
  */
-function submitTournament (event) {
+function submitTournament (submitEvent) {
 
     event.preventDefault();
-    const elements = event.target.elements;
+    const elements = submitEvent.target.elements;
 
     let name = "";
     let participants = [];
@@ -50,7 +50,7 @@ function submitTournament (event) {
 }
 
 /**
- * Loads the creator form onto the page view.
+ * Loads the creator form to the page view.
  */
 export function loadCreator () {
 

@@ -18,8 +18,8 @@ const auth = firebase.auth();
 
 /**
  * Creates a new Tournament.
- * @param {string} name
- * @param {string[]} participants
+ * @param {string} name The name of the Tournament.
+ * @param {string[]} participants The Tournament's participants.
  * @return {Tournament}
  */
 export class Tournament {
@@ -34,7 +34,7 @@ export class Tournament {
 }
 
 /**
- * POSTs the given Tournament to the database.
+ * Saves the given Tournament to the database.
  * @param {Tournament} tournament 
  */
 export function postTournament (tournament) {
@@ -42,7 +42,7 @@ export function postTournament (tournament) {
 }
 
 /**
- * GETs the Tournament with the given id from the database and returns a Promise to corresponding DataSnapshot.
+ * Attempts to retrieve a Tournament from the database with the given ID.
  * @param {string} id
  * @returns {Promise<DataSnapshot>}
  */
@@ -51,7 +51,7 @@ export function getTournament (id) {
 }
 
 /**
- * Prompts the user for login and logs them in using the given credentials.
+ * Prompts the user for their login information and attempts to log them in.
  * @returns {Promise<UserCredential>}
  */
 export function getLogin () {

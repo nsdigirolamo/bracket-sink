@@ -1,8 +1,8 @@
 import { getTournament } from "./firebase-utils.js";
 
 /**
- * Loads the given tournament to the page view.
- * @param {Tournament} tournament
+ * Loads a Tournament to the page view.
+ * @param {string} tournament_id The id of the Tournament to be loaded.
  */
 export function loadViewer (tournament_id) {
 

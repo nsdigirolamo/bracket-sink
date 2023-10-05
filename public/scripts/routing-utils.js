@@ -3,8 +3,7 @@ import { loadViewer } from "./tournament-viewer.js";
 import { getLogin } from "./firebase-utils.js";
 
 /**
- * Functions that use regex to test for a valid url path.
- * @param {string} url (this applies to all functions)
+ * A map of functions that test for valid URL paths using regex.
  */
 const url_routes = {
     login: (url) => /^\/login$/.test(url),
@@ -46,6 +45,9 @@ async function loadHome () {
     });
 }
 
+/**
+ * Loads the login screen to the page view.
+ */
 export function loadLogin () {
 
     const intro_div = document.createElement("div");
