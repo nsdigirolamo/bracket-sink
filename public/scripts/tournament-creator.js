@@ -8,29 +8,25 @@ let participant_count = 0;
 function addParticipantTextInputElement () {
 
     participant_count++;
-    const new_id = "participant-" + participant_count;
-
-    const new_label_element = document.createElement("label");
-    new_label_element.htmlFor = new_id;
-    new_label_element.textContent = `Participant ${participant_count}:`
-
-    const new_input_element = document.createElement("input");
-    new_input_element.type = "text";
-    new_input_element.id = new_id;
+    const new_div = document.createElement("div");
+    new_div.className = "participant-input";
+    new_div.innerHTML = `
+        <label for="participant-${participant_count}">Participant ${participant_count}:</label>
+        <input id="participant-${participant_count}" type="text">
+    `; 
 
     const tournament_participant_fieldset = document.querySelector("#tournament-participants");
     const add_participant_button = document.querySelector("#add-participant");
-    tournament_participant_fieldset.insertBefore(new_label_element, add_participant_button);
-    tournament_participant_fieldset.insertBefore(new_input_element, add_participant_button);
+    tournament_participant_fieldset.insertBefore(new_div, add_participant_button);
 }
 
 /**
- * Parses information from the creator form, constructs a Tournament from this information, and saves the Tournament to the database.
+ * Parses information from the creator form, constructs a Tournament from the information, and saves the Tournament to the database.
  * @param {SubmitEvent} submitEvent The called event from the creator form's submission.
  */
 function submitTournament (submitEvent) {
 
-    event.preventDefault();
+    submitEvent.preventDefault();
     const elements = submitEvent.target.elements;
 
     let name = "";
