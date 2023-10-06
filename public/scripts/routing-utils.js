@@ -17,7 +17,7 @@ const url_routes = {
  * Changes the URL to the given path and adds the path to the browser history.
  * @param {string} path
  */
-let pushUrl = (path) => history.pushState(path, "", path);
+export let pushUrl = (path) => history.pushState(path, "", path);
 
 /**
  * Changes the URL to the given path but does not add the path to the browser history.
@@ -44,6 +44,17 @@ async function loadHome () {
         pushUrl("/tournaments/create");
         clearPageView();
         loadCreator();
+    });
+
+    const list_nav_button = document.createElement("button");
+    list_nav_button.id = "tournament-list-nav-button";
+    list_nav_button.textContent = "Tournament List";
+    document.querySelector("#page-view").appendChild(list_nav_button);
+
+    document.querySelector("#tournament-list-nav-button").addEventListener("click", () => {
+        pushUrl("/tournaments");
+        clearPageView();
+        loadList();
     });
 }
 

@@ -1,5 +1,5 @@
 import { nanoid } from "https://cdn.jsdelivr.net/npm/nanoid/nanoid.js";
-import { routeUrl, loadLogin, clearPageView, replaceUrl } from "./routing-utils.js";
+import { routeUrl, replaceUrl } from "./routing-utils.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDFK2v1m8prU3lD80WGvGlRvEyErXp-HVc",
@@ -25,9 +25,10 @@ export let initial_login_attempted = false;
 export class Tournament {
     constructor(name, participants) {
         this.id = nanoid(10);
-        this.creator_uid = auth.currentUser.uid;
-        this.creator_display_name = auth.currentUser.displayName;
+        this.creator_uid = firebase.auth().currentUser.uid;
+        this.creator_display_name = firebase.auth().currentUser.displayName;
         this.date_created = new Date().toJSON();
+        this.date_updated = new Date().toJSON();
         this.name = name;
         this.participants = participants;
     }
@@ -38,6 +39,7 @@ export class Tournament {
  * @param {Tournament} tournament 
  */
 export function postTournament (tournament) {
+    tournament.date_updated = new Date().toJSON();
     firebase.database().ref(`/tournaments/${tournament.id}`).set(tournament);
 }
 
@@ -50,8 +52,20 @@ export function getTournament (id) {
     return firebase.database().ref(`/tournaments/${id}`).get();
 }
 
+/**
+ * Attempts to retrieve a list of all Tournaments from the database.
+ * @returns {Promise<DataSnapshot>}
+ */
 export function getTournamentList () {
     return firebase.database().ref("/tournaments").get();
+}
+
+/**
+ * Attempts to remove a Tournament from the database with the given ID.
+ * @param {string} id 
+ */
+export function deleteTournament (id) {
+    firebase.database().ref(`/tournaments/${id}`).remove();
 }
 
 /**

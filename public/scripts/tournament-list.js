@@ -1,5 +1,7 @@
 import { getTournamentList } from "./firebase-utils.js";
 import { Tournament } from "./firebase-utils.js";
+import { pushUrl, clearPageView } from "./routing-utils.js";
+import { loadViewer } from "./tournament-viewer.js";
 
 /**
  * Creates a new div to display the given Tournament.
@@ -10,6 +12,14 @@ function createTournamentDiv (tournament) {
     const new_div = document.createElement("div");
     new_div.id = `tournament-${tournament.id}`;
     new_div.innerHTML = JSON.stringify(tournament);
+
+    document.querySelector("#page-view").appendChild(new_div);
+    document.querySelector(`#${new_div.id}`).addEventListener("click", () => {
+        pushUrl(`/tournaments/${tournament.id}`);
+        clearPageView();
+        loadViewer(tournament.id);
+    });
+
     return new_div;
 }
 
@@ -18,11 +28,14 @@ function createTournamentDiv (tournament) {
  */
 export function loadList () {
     getTournamentList().then(result => {
-        const tournament_list = Object.values(result.val());
+
+        let tournament_list = [];
+        if (result.val()) tournament_list = Object.values(result.val());
+
         for (let i = 0; i < tournament_list.length; i++) {
-            const tournamentDiv = createTournamentDiv(tournament_list[i]);
-            document.querySelector("#page-view").appendChild(tournamentDiv);
+            createTournamentDiv(tournament_list[i]);
         }
+
     }).catch(error => {
         console.log(error);
     });

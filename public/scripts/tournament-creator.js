@@ -1,4 +1,4 @@
-import { Tournament, postTournament } from "./firebase-utils.js";
+import { Tournament, postTournament, deleteTournament } from "./firebase-utils.js";
 
 let participant_count = 0;
 
