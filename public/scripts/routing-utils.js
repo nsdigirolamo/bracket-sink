@@ -79,6 +79,8 @@ export function loadLogin () {
  */
 export function routeUrl () {
 
+    if (!firebase.auth().currentUser) replaceUrl("/login");
+
     const path = document.location.pathname;
     clearPageView();
 

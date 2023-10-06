@@ -14,8 +14,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const auth = firebase.auth();
-
 /**
  * Creates a new Tournament.
  * @param {string} name The name of the Tournament.
@@ -59,20 +57,16 @@ export function getLogin () {
     return firebase.auth().signInWithPopup(provider);
 }
 
-auth.onAuthStateChanged((user) => {
+firebase.auth().onAuthStateChanged((user) => {
     if (user) {
         routeUrl();
         document.querySelector("#display-user").textContent = user.displayName;
         document.querySelector("#sign-out-button").style.visibility = "visible";
     } else {
-        clearPageView();
-        replaceUrl("/login");
-        loadLogin();
         document.querySelector("#display-user").textContent = "Not Signed In.";
         document.querySelector("#sign-out-button").style.visibility = "hidden";
     }
+    routeUrl();
 });
 
-document.querySelector("#sign-out-button").addEventListener("click", () => {
-    auth.signOut();
-});
+document.querySelector("#sign-out-button").addEventListener("click", firebase.auth().signOut);
