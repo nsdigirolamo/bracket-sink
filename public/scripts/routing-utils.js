@@ -1,6 +1,7 @@
 import { loadCreator } from "./tournament-creator.js";
 import { loadViewer } from "./tournament-viewer.js";
 import { getLogin } from "./firebase-utils.js";
+import { loadList } from "./tournament-list.js";
 
 /**
  * A map of functions that test for valid URL paths using regex.
@@ -8,7 +9,8 @@ import { getLogin } from "./firebase-utils.js";
 const url_routes = {
     login: (url) => /^\/login$/.test(url),
     create_tournament: (url) => /^\/tournaments\/create$/.test(url),
-    tournaments: (url) => /^\/tournaments\/[\w-]{10}$/.test(url),
+    tournament_list: (url) => /^\/tournaments$/.test(url),
+    tournament: (url) => /^\/tournaments\/[\w-]{10}$/.test(url),
 };
 
 /**
@@ -79,8 +81,6 @@ export function loadLogin () {
  */
 export function routeUrl () {
 
-    if (!firebase.auth().currentUser) replaceUrl("/login");
-
     const path = document.location.pathname;
     clearPageView();
 
@@ -92,10 +92,14 @@ export function routeUrl () {
 
         loadCreator();
 
-    } else if (url_routes.tournaments(path)) {
+    } else if (url_routes.tournament(path)) {
 
         const id = path.split("/")[2];
         loadViewer(id);
+
+    } else if (url_routes.tournament_list(path)) {
+
+        loadList();
 
     } else {
 
@@ -106,4 +110,7 @@ export function routeUrl () {
 }
 
 addEventListener("DOMContentLoaded", routeUrl);
-addEventListener("popstate", routeUrl);
+addEventListener("popstate", () => {
+    if (!firebase.auth().currentUser) replaceUrl("/login");
+    routeUrl();
+});

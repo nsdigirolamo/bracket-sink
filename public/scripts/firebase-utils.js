@@ -14,6 +14,8 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+export let initial_login_attempted = false;
+
 /**
  * Creates a new Tournament.
  * @param {string} name The name of the Tournament.
@@ -48,6 +50,10 @@ export function getTournament (id) {
     return firebase.database().ref(`/tournaments/${id}`).get();
 }
 
+export function getTournamentList () {
+    return firebase.database().ref("/tournaments").get();
+}
+
 /**
  * Prompts the user for their login information and attempts to log them in.
  * @returns {Promise<UserCredential>}
@@ -59,14 +65,14 @@ export function getLogin () {
 
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-        routeUrl();
         document.querySelector("#display-user").textContent = user.displayName;
         document.querySelector("#sign-out-button").style.visibility = "visible";
     } else {
         document.querySelector("#display-user").textContent = "Not Signed In.";
         document.querySelector("#sign-out-button").style.visibility = "hidden";
+        replaceUrl("/login");
+        routeUrl();
     }
-    routeUrl();
 });
 
-document.querySelector("#sign-out-button").addEventListener("click", firebase.auth().signOut);
+document.querySelector("#sign-out-button").addEventListener("click", () => { firebase.auth().signOut() });
