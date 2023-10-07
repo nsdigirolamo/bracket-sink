@@ -1,9 +1,9 @@
 {
     "rules": {
+      	".read": "true",
         "tournaments": {
-            ".write": "true",
-            "$tid": {
-                ".read": "data.child('creator_uid').val() === auth.uid"
+          	"$tid": {
+              ".write": "!data.exists() || data.child('creator_uid').val() === auth.uid"
             }
         }
     }
