@@ -1,42 +1,54 @@
 import { Tournament, getTournament, postTournament, deleteTournament } from "./firebase-utils.js";
 
 /**
- * Parses through a list of participants and properly divides them into pairs for a bracket.
- * @param {string[]} participants 
- * @returns An object containing initial bracket information.
+ * Parses through an array of participants and properly divides them into opposing pairs.
+ * @param {string[][]} participants 
+ * @returns An array of arrays. Each sub array contains either a pair of participants or a single participant and a null value.
  */
-function initializeBrackets (participants) {
+function initializeTeams (participants) {
 
-    let init_teams = [];
+    let teams = [];
     let is_even = true;
     let has_spare = false;
 
-    console.log(participants);
-
     for (let i = 0; i < participants.length; i += 2) {
         if (i + 1 < participants.length) {
-            init_teams.push([participants[i], participants[i + 1]]);
+            teams.push([participants[i], participants[i + 1]]);
             is_even = !is_even;
         } else {
-            init_teams.push([participants[i], null]);
+            teams.push([participants[i], null]);
             has_spare = true;
         }
     }
 
     if (is_even && has_spare) {
-        const to_be_divided = init_teams.splice(-2, 1)[0];
-        init_teams.push([to_be_divided[0], null]);
-        init_teams.push([to_be_divided[1], null]);
+        const to_be_divided = teams.splice(-2, 1)[0];
+        teams.push([to_be_divided[0], null]);
+        teams.push([to_be_divided[1], null]);
     } else if (!is_even && !has_spare) {
-        const to_be_divided = init_teams.splice(-1, 1)[0];
-        init_teams.push([to_be_divided[0], null]);
-        init_teams.push([to_be_divided[1], null]);
+        const to_be_divided = teams.splice(-1, 1)[0];
+        teams.push([to_be_divided[0], null]);
+        teams.push([to_be_divided[1], null]);
     }
 
-    return {
-        teams: init_teams,
-        results: []
-    }
+    return teams;
+}
+
+/**
+ * Generates a bracket based on the given list of participants.
+ * @param {string[]} participants
+ * @returns An object containing initial bracket information.
+ */
+function initializeBrackets (participants) {
+
+    $(function() {
+        $('#tournament-bracket').bracket({
+            init: {
+                teams: initializeTeams(participants),
+            },
+            save: () => {}, // This callback is required to allow editing the brackets for some horrible reason.
+        });
+    });
 
 }
 
@@ -96,12 +108,7 @@ function loadBracketDiv (tournament) {
     bracket_div.id = "tournament-bracket";
 
     document.querySelector("#page-view").appendChild(bracket_div);
-     
-    $(function() {
-        $('#tournament-bracket').bracket({
-            init: initializeBrackets(tournament.participants)
-        });
-    });
+    initializeBrackets(tournament.participants);
 }
 
 /**
