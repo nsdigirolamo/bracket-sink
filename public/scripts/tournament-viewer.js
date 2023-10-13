@@ -20,15 +20,6 @@ function loadInfoDiv (tournament) {
 
     if (firebase.auth().currentUser.uid == tournament.creator_uid) {
 
-        const update_button = document.createElement("button");
-        update_button.id = "update-button";
-        update_button.textContent = "Update Me!";
-        info_div.appendChild(update_button);
-
-        document.querySelector("#update-button").addEventListener("click", () => {
-            postTournament(tournament);
-        });
-
         const remove_button = document.createElement("button");
         remove_button.id = "remove-button";
         remove_button.textContent = "Delete Me!";
