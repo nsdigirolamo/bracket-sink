@@ -11,7 +11,11 @@ import { loadViewer } from "./tournament-viewer.js";
 function createTournamentDiv (tournament) {
     const new_div = document.createElement("div");
     new_div.id = `tournament-${tournament.id}`;
-    new_div.innerHTML = JSON.stringify(tournament);
+    new_div.innerHTML = `
+        <h2>${tournament.name}</h2>
+        <h5>${tournament.id}</h5>
+        <h3>Created by ${tournament.creator_display_name}</h3>
+    `;
 
     document.querySelector("#page-view").appendChild(new_div);
     document.querySelector(`#${new_div.id}`).addEventListener("click", () => {
