@@ -1,56 +1,4 @@
-import { Tournament, getTournament, postTournament, deleteTournament } from "./firebase-utils.js";
-
-/**
- * Parses through an array of participants and properly divides them into opposing pairs.
- * @param {string[][]} participants 
- * @returns An array of arrays. Each sub array contains either a pair of participants or a single participant and a null value.
- */
-function initializeTeams (participants) {
-
-    let teams = [];
-    let is_even = true;
-    let has_spare = false;
-
-    for (let i = 0; i < participants.length; i += 2) {
-        if (i + 1 < participants.length) {
-            teams.push([participants[i], participants[i + 1]]);
-            is_even = !is_even;
-        } else {
-            teams.push([participants[i], null]);
-            has_spare = true;
-        }
-    }
-
-    if (is_even && has_spare) {
-        const to_be_divided = teams.splice(-2, 1)[0];
-        teams.push([to_be_divided[0], null]);
-        teams.push([to_be_divided[1], null]);
-    } else if (!is_even && !has_spare) {
-        const to_be_divided = teams.splice(-1, 1)[0];
-        teams.push([to_be_divided[0], null]);
-        teams.push([to_be_divided[1], null]);
-    }
-
-    return teams;
-}
-
-/**
- * Generates a bracket based on the given list of participants.
- * @param {string[]} participants
- * @returns An object containing initial bracket information.
- */
-function initializeBrackets (participants) {
-
-    $(function() {
-        $('#tournament-bracket').bracket({
-            init: {
-                teams: initializeTeams(participants),
-            },
-            save: () => {}, // This callback is required to allow editing the brackets for some horrible reason.
-        });
-    });
-
-}
+import { Tournament, getTournament, postTournament, deleteTournament, decodeTeamData, decodeResultsData } from "./firebase-utils.js";
 
 /**
  * Loads a div containing information about the given tournament.
@@ -69,12 +17,6 @@ function loadInfoDiv (tournament) {
     `;
 
     document.querySelector("#page-view").appendChild(info_div);
-
-    for (let i = 0; i < tournament.participants.length; i++) {
-        const participant_li = document.createElement("li");
-        participant_li.textContent = tournament.participants[i];
-        document.querySelector("#participants-list").appendChild(participant_li);
-    }
 
     if (firebase.auth().currentUser.uid == tournament.creator_uid) {
 
@@ -99,16 +41,14 @@ function loadInfoDiv (tournament) {
 }
 
 /**
- * Loads a div containing the bracket for the given tournament.
- * @param {Tournament} tournament 
+ * Loads the bracket div.
  */
-function loadBracketDiv (tournament) {
+export function loadBracketDiv () {
 
     const bracket_div = document.createElement("div");
     bracket_div.id = "tournament-bracket";
 
     document.querySelector("#page-view").appendChild(bracket_div);
-    initializeBrackets(tournament.participants);
 }
 
 /**
@@ -120,8 +60,21 @@ export function loadViewer (tournament_id) {
     getTournament(tournament_id).then(result => {
 
         const tournament = result.val();
+        tournament.bracket_data.teams = decodeTeamData(tournament.bracket_data.teams);
+        tournament.bracket_data.results = decodeResultsData(tournament.bracket_data.results);
+
         loadInfoDiv(tournament);
         loadBracketDiv(tournament);
+
+        $(function() {
+            $('#tournament-bracket').bracket({
+                init: tournament.bracket_data,
+                save: (data) => {
+                    tournament.bracket_data = data;
+                    postTournament(tournament);
+                }
+            });
+        });
 
     }).catch(error => {
         console.log(error);
