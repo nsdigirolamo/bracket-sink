@@ -11,9 +11,8 @@ function loadInfoDiv (tournament) {
 
     info_div.innerHTML = `
         <h2>${tournament.name}</h2>
+        <h5>${tournament.id}</h5>
         <h3>Created by ${tournament.creator_display_name}</h3>
-        <h4>Participants:</h4>
-        <ul id="participants-list"></ul>
     `;
 
     document.querySelector("#page-view").appendChild(info_div);
@@ -22,7 +21,7 @@ function loadInfoDiv (tournament) {
 
         const remove_button = document.createElement("button");
         remove_button.id = "remove-button";
-        remove_button.textContent = "Delete Me!";
+        remove_button.textContent = "Delete Tournament";
         info_div.appendChild(remove_button);
 
         document.querySelector("#remove-button").addEventListener("click", () => {
