@@ -57,15 +57,32 @@ export function loadViewer (tournament_id) {
         loadInfoDiv(tournament);
         loadBracketDiv(tournament);
 
-        $(function() {
-            $('#tournament-bracket').bracket({
-                init: tournament.bracket_data,
-                save: (data) => {
-                    tournament.bracket_data = data;
-                    postTournament(tournament);
-                }
+        if (firebase.auth().currentUser.uid == tournament.creator_uid) {
+
+            $(function() {
+                $('#tournament-bracket').bracket({
+                    init: tournament.bracket_data,
+                    save: (data) => {
+                        tournament.bracket_data = data;
+                        postTournament(tournament);
+                    }
+                });
             });
-        });
+
+        } else {
+
+            /**
+             * The save callback is absent if the current user is not the tournament's creator.
+             * This makes it so non-creator users can't edit the tournaments.
+             */
+
+            $(function() {
+                $('#tournament-bracket').bracket({
+                    init: tournament.bracket_data
+                });
+            });
+
+        }
 
     }).catch(error => {
         console.log(error);
