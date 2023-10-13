@@ -19,17 +19,19 @@ export let initial_login_attempted = false;
 /**
  * Creates a new Tournament.
  * @param {string} name The name of the Tournament.
+ * @param {Date} start_date The tournament's start date if not in manual mode.
  * @param {BracketInitData<TTeam, TScore, TMData>} bracket_data Data containing information regarding the tournmanent's brackets.
  * @return {Tournament}
  */
 export class Tournament {
-    constructor(name, bracket_data) {
+    constructor(name, start_date, bracket_data) {
         this.id = nanoid(10);
         this.creator_uid = firebase.auth().currentUser.uid;
         this.creator_display_name = firebase.auth().currentUser.displayName;
         this.date_created = new Date().toJSON();
         this.date_updated = new Date().toJSON();
         this.name = name;
+        this.start_date = start_date.toJSON();
         this.bracket_data = bracket_data;
     }
 }
@@ -40,6 +42,12 @@ export class Tournament {
  */
 export function postTournament (tournament) {
     tournament.date_updated = new Date().toJSON();
+    if (tournament.bracket_data == null) {
+        tournament.bracket_data = {
+            teams: [[null, null]],
+            results: [[[[null, null]]]]
+        }
+    }
     tournament.bracket_data.teams = encodeTeamData(tournament.bracket_data.teams);
     tournament.bracket_data.results = encodeResultsData(tournament.bracket_data.results);
     firebase.database().ref(`/tournaments/${tournament.id}`).set(tournament);

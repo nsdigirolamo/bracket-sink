@@ -27,6 +27,35 @@ function loadInfoDiv (tournament) {
         document.querySelector("#remove-button").addEventListener("click", () => {
             deleteTournament(tournament.id);
         });
+
+    } else {
+
+        const current_date = new Date();
+        const start_date = tournament.start_date == null ? null : new Date(tournament.start_date);
+
+        console.log(tournament);
+
+        if (tournament.start_date && current_date < start_date) {
+
+            const time_div = document.createElement("div");
+            time_div.id = "time";
+            time_div.textContent = `This tournament starts on ${start_date.toDateString()}. You can join this tournament at any time before that date.`;
+            info_div.appendChild(time_div);
+
+            const join_button = document.createElement("button");
+            join_button.id = "join-button";
+            join_button.textContent = "Join Tournament";
+            info_div.appendChild(join_button);
+
+        } else {
+
+            const time_div = document.createElement("div");
+            time_div.id = "time";
+            time_div.textContent = "This tournament is closed to new members.";
+            info_div.appendChild(time_div);
+
+        }
+
     }
 }
 
