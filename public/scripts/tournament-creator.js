@@ -1,4 +1,5 @@
 import { Tournament, postTournament } from "./firebase-utils.js";
+import { routeUrl, replaceUrl } from "./routing-utils.js";
 import { loadBracketDiv } from "./tournament-viewer.js";
 
 let bracket_data = null;
@@ -22,7 +23,10 @@ function submitTournament (submitEvent) {
         }
     }
 
-    postTournament(new Tournament(name, bracket_data));
+    let tournament = new Tournament(name, bracket_data)
+    postTournament(tournament);
+    replaceUrl(`/tournaments/${tournament.id}`);
+    routeUrl();
 }
 
 /**
