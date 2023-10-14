@@ -1,4 +1,12 @@
-import { Tournament, getTournament, postTournament, deleteTournament, decodeTeamData, decodeResultsData } from "./firebase-utils.js";
+import { Tournament, getTournament, postTournament, deleteTournament, decodeTeamData, decodeResultsData, postParticipant } from "./firebase-utils.js";
+
+/**
+ * Adds the current user to the list of potential participants for the Tournament with the given ID.
+ * @param {Tournament} tournament 
+ */
+function addCurrentUserToTournament (id) {
+    postParticipant(id, firebase.auth().currentUser);
+}
 
 /**
  * Loads a div containing information about the given tournament.
@@ -32,8 +40,6 @@ function loadInfoDiv (tournament) {
 
         const current_date = new Date();
         const start_date = tournament.start_date == null ? null : new Date(tournament.start_date);
-
-        console.log(tournament);
 
         if (tournament.start_date && current_date < start_date) {
 
@@ -98,6 +104,10 @@ export function loadViewer (tournament_id) {
             });
 
         } else {
+
+            document.querySelector("#join-button").addEventListener("click", () => {
+                addCurrentUserToTournament(tournament);
+            });
 
             /**
              * The save callback is absent if the current user is not the tournament's creator.

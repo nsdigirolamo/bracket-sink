@@ -79,6 +79,24 @@ export function deleteTournament (id) {
 }
 
 /**
+ * Appends the given user to the list of participants for the Tournament with the given ID.
+ * @param {string} id
+ * @param {firebase.User} user 
+ */
+export function postParticipant (id, user) {
+    firebase.database().ref(`/participants/${id}/${user.uid}`).set(user.displayName);
+}
+
+/**
+ * Attempts to retrieve the participant list for the Tournament with the given ID.
+ * @param {string} id 
+ * @returns {Promise<DataSnapshot}
+ */
+export function getParticipants (id) {
+    return firebase.database().ref(`/participants/${id}`).get();
+}
+
+/**
  * Firebase can't store the null values that the bracket plugin needs. This function
  * converts the null values to empty strings to be stored in firebase.
  * @param {string[][]} teams 
