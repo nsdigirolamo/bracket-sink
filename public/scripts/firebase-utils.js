@@ -50,6 +50,8 @@ export function postTournament (tournament) {
     }
     tournament.bracket_data.teams = encodeTeamData(tournament.bracket_data.teams);
     tournament.bracket_data.results = encodeResultsData(tournament.bracket_data.results);
+    firebase.database().ref(`/participant-lists/${tournament.id}/creator_uid`).set(tournament.creator_uid);
+    firebase.database().ref(`/participant-lists/${tournament.id}/start_date`).set(Date.parse(new Date(tournament.start_date)));
     firebase.database().ref(`/tournaments/${tournament.id}`).set(tournament);
 }
 
@@ -84,7 +86,7 @@ export function deleteTournament (id) {
  * @param {firebase.User} user 
  */
 export function postParticipant (id, user) {
-    firebase.database().ref(`/participants/${id}/${user.uid}`).set(user.displayName);
+    firebase.database().ref(`/participant-lists/${id}/participants/${user.uid}`).set(user.displayName);
 }
 
 /**
@@ -93,7 +95,7 @@ export function postParticipant (id, user) {
  * @returns {Promise<DataSnapshot}
  */
 export function getParticipants (id) {
-    return firebase.database().ref(`/participants/${id}`).get();
+    return firebase.database().ref(`/participant-lists/${id}/participants`).get();
 }
 
 /**
