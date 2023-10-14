@@ -88,13 +88,12 @@ function createInfoDiv (tournament) {
 
 /**
  * Loads the bracket div.
+ * @return {HTMLElement}
  */
-export function loadBracketDiv () {
-
+export function createBracketDiv () {
     const bracket_div = document.createElement("div");
     bracket_div.id = "tournament-bracket";
-
-    document.querySelector("#page-view").appendChild(bracket_div);
+    return bracket_div;
 }
 
 /**
@@ -149,7 +148,8 @@ export function loadViewer (tournament_id) {
 
         }
 
-        loadBracketDiv();
+        const bracket_div = createBracketDiv();
+        document.querySelector("#page-view").appendChild(bracket_div);
 
     }).catch(error => {
         console.log(error);

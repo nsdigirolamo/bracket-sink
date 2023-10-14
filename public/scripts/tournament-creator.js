@@ -1,6 +1,6 @@
 import { Tournament, postTournament } from "./firebase-utils.js";
 import { routeUrl, replaceUrl } from "./routing-utils.js";
-import { loadBracketDiv } from "./tournament-viewer.js";
+import { createBracketDiv } from "./tournament-viewer.js";
 
 let bracket_data = null;
 
@@ -51,15 +51,16 @@ export function loadCreator () {
 
     document.querySelector("#page-view").appendChild(form);
 
-    loadBracketDiv();
-    document.querySelector("#tournament-bracket").style.display = "none";
+    const bracket_div = createBracketDiv();
+    bracket_div.style.display = "none";
+    document.querySelector("#page-view").appendChild(bracket_div);
 
     document.querySelector("#manual-mode").addEventListener("change", () => {
-        let display = document.querySelector("#tournament-bracket").style.display;
+        let display = bracket_div.style.display;
         document.querySelector("#tournament-start-date-label").style.display = display;
         document.querySelector("#tournament-start-date").style.display = display;
         display = display == "inline" ? "none" : "inline";
-        document.querySelector("#tournament-bracket").style.display = display;
+        bracket_div.style.display = display;
     });
 
     $(function() {
