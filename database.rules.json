@@ -1,7 +1,23 @@
 {
     "rules": {
-      	".read": "true",
+        "participant-lists": {
+          	"$tid": {
+              	".read": "data.child('creator_uid').val() === auth.uid",
+                "creator_uid": {
+                  	".write": "!data.exists() || newData.parent().child('creator_uid').val() === auth.uid"
+                },
+                "start_date": {
+                  	".write": "!data.exists() || newData.parent().child('creator_uid').val() === auth.uid"
+                },
+              	"participants": {
+                  	"$participant": {
+                				".write": "(!data.exists() && now < newData.parent().parent().child('start_date').val()) || data.parent().parent().child('creator_uid').val() === auth.uid"
+              			}  
+                }
+            }
+        },
         "tournaments": {
+          	".read": "true",
           	"$tid": {
               ".write": "!data.exists() || data.child('creator_uid').val() === auth.uid"
             }
