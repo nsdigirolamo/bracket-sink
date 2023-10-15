@@ -81,21 +81,61 @@ export function deleteTournament (id) {
 }
 
 /**
- * Appends the given user to the list of participants for the Tournament with the given ID.
+ * Appends the given user to the requested participant list of the Tournament with the given ID.
  * @param {string} id
  * @param {firebase.User} user 
  */
-export function postParticipant (id, user) {
-    firebase.database().ref(`/participant-lists/${id}/participants/${user.uid}`).set(user.displayName);
+export function postParticipantRequest (id, user) {
+    firebase.database().ref(`/participant-lists/${id}/requests/${user.uid}`).set(user.displayName);
 }
 
 /**
- * Attempts to retrieve the participant list for the Tournament with the given ID.
+ * Attempts to retrieve the requested participant list of the Tournament with the given ID.
  * @param {string} id 
  * @returns {Promise<DataSnapshot}
  */
-export function getParticipants (id) {
-    return firebase.database().ref(`/participant-lists/${id}/participants`).get();
+export function getParticipantRequests (id) {
+    return firebase.database().ref(`/participant-lists/${id}/requests`).get();
+}
+
+/**
+ * Attempts to move a user from the requested participant list to the accepted participant list.
+ * @param {string} tid The Tournament's ID.
+ * @param {string} uid The ID of the user to be moved.
+ * @param {string} display_name The display name of the user to be moved.
+ */
+export function acceptParticipantRequest (tid, uid, display_name) {
+    firebase.database().ref(`/participant-lists/${tid}/requests/${uid}`).remove();
+    firebase.database().ref(`/participant-lists/${tid}/accepts/${uid}`).set(display_name);
+}
+
+/**
+ * Get the list of accepted users for the Tournament with the given ID.
+ * @param {string} tid
+ * @returns {Promise<DataSnapshot}
+ */
+export function getParticipantAccepts (tid) {
+    return firebase.database().ref(`/participant-lists/${tid}/accepts`);
+}
+
+/**
+ * Attempts to move a user from the requested participant list to the denied participant list.
+ * @param {string} tid The Tournament's ID.
+ * @param {string} uid The ID of the user to be moved.
+ * @param {string} display_name The display name of the user to be moved.
+ */
+export function denyParticipantRequest (tid, uid, display_name) {
+    firebase.database().ref(`/participant-lists/${tid}/requests/${uid}`).remove();
+    firebase.database().ref(`/participant-lists/${tid}/denies/${uid}`).set(display_name);
+}
+
+/**
+ * Get the list of denied users for the Tournament with the given ID.
+ * @param {string} tid
+ * @returns {Promise<DataSnapshot}
+ */
+export function getParticipantDenies (tid) {
+    return firebase.database().ref(`/participant-lists/${tid}/denies`);
 }
 
 /**
