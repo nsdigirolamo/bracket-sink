@@ -11,6 +11,7 @@ import { loadViewer } from "./tournament-viewer.js";
 function createTournamentDiv (tournament) {
     const new_div = document.createElement("div");
     new_div.id = `tournament-${tournament.id}`;
+    new_div.className = "tournament-list-element";
     new_div.innerHTML = `
         <h2>${tournament.name}</h2>
         <h5>${tournament.id}</h5>

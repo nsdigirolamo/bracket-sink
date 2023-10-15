@@ -1,0 +1,14 @@
+header {
+    text-align: center;
+    margin-bottom: 10vh
+}
+
+.tournament-list-element {
+    border-style: solid;
+    padding: 0 2em 0 2em;
+    margin: 0 10vw 0 10vw;
+}
+
+#page-view {
+    text-align: center;
+}
