@@ -9,7 +9,17 @@
                 "start_date": {
                   	".write": "!data.exists() || newData.parent().child('creator_uid').val() === auth.uid"
                 },
-              	"participants": {
+              	"requests": {
+                  	"$participant": {
+                				".write": "(!data.exists() && now < newData.parent().parent().child('start_date').val()) || data.parent().parent().child('creator_uid').val() === auth.uid"
+              			}  
+                },
+                "accepts": {
+                  	"$participant": {
+                				".write": "(!data.exists() && now < newData.parent().parent().child('start_date').val()) || data.parent().parent().child('creator_uid').val() === auth.uid"
+              			}  
+                },
+                "denies": {
                   	"$participant": {
                 				".write": "(!data.exists() && now < newData.parent().parent().child('start_date').val()) || data.parent().parent().child('creator_uid').val() === auth.uid"
               			}  
