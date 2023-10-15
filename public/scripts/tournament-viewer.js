@@ -1,5 +1,5 @@
 import { Tournament, getTournament, postTournament, deleteTournament, decodeTeamData, decodeResultsData, postParticipantRequest, getParticipantRequests, denyParticipantRequest, acceptParticipantRequest, getParticipantAccepts, getParticipantDenies } from "./firebase-utils.js";
-import { clearPageView, routeUrl } from "./routing-utils.js";
+import { clearPageView, pushUrl, routeUrl } from "./routing-utils.js";
 
 /**
  * Creates the div that informs users when the Tournament starts.
@@ -35,6 +35,10 @@ function createRemoveButton (tournament) {
     button.textContent = "Delete Tournament";
     button.addEventListener("click", () => { 
         deleteTournament(tournament.id);
+        clearPageView();
+        pushUrl("/home");
+        routeUrl();
+        alert("Tournament Deleted!");
     });
     return button;
 }
